@@ -1,6 +1,7 @@
 # cordova-plugin-usbserialport
 
-**[阅读中文版README.md](./README.zh.md)**  
+**[阅读中文版README.md](./README.md)**  
+  
 This plug-in is modified according to [cordovarduino](https://github.com/xseignard/cordovarduino) and updated [usb-serial-for-android](https://github.com/mik3y/usb-serial-for-android) library.
 
 ## Description
