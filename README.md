@@ -17,6 +17,8 @@ cordova项目运行:
 
 ```bash
 cordova plugin add cordova-plugin-usbserialport
+# 或
+cordova plugin add https://github.com/king2088/cordova-plugin-usbserialport.git
 ```
 
 ### 使用方法

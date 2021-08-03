@@ -16,6 +16,8 @@ From the root folder of your cordova project, run :
 
 ```bash
 cordova plugin add cordova-plugin-usbserialport
+# or
+cordova plugin add https://github.com/king2088/cordova-plugin-usbserialport.git
 ```
 
 ### How to use it

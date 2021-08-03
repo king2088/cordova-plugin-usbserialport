@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     id="cordova-plugin-usbserialport"
-    version="0.0.2">
+    version="0.0.3">
     <name>cordova-plugin-usbserialport</name>
     <description>Cordova plugin to communicate with the android USB serial port, integrate the latest mik3y/usb-serial-for-android drivers</description>
     <license>MIT</license>
