@@ -1,7 +1,7 @@
 # cordova-plugin-usbserialport
 
-**[Read English README.md](./README.md)**
-此插件是基于[cordovarduino](https://github.com/xseignard/cordovarduino)基础上，升级了[usb-serial-for-android](https://github.com/mik3y/usb-serial-for-android)库后增加了相应的方法，目前可以很好的适用于常见的一些USB/Type-C转串口的串口硬件。使用此插件，可以在android手机上直接使用USB或Type-C接口的USB转458/232等串口。
+**[Read English README.md](./README.md)**  
+此插件是基于[cordovarduino](https://github.com/xseignard/cordovarduino)基础上，升级了[usb-serial-for-android](https://github.com/mik3y/usb-serial-for-android)库后增加了相应的方法，目前可以很好的适用于常见的一些USB/Type-C转串口的串口硬件。使用此插件，可以在android手机上直接使用USB或Type-C接口的USB转458/232等串口。  
 **此插件仅适用于Android**
 
 ## 简介
