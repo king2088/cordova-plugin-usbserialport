@@ -1,0 +1,29 @@
+{
+  "name": "cordova-plugin-usbserialport",
+  "version": "0.0.1",
+  "description": "Cordova plug-in for serial port",
+  "main": "plugin.xml",
+  "cordova": {
+    "id": "cordova-plugin-usbserialport",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/king2088/cordova-plugin-usbserialport.git"
+  },
+  "keywords": [
+    "cordova",
+    "serial port",
+    "serial",
+    "cordova plugin",
+    "android"
+  ],
+  "author": "Tony Tao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/king2088/cordova-plugin-usbserialport/issues"
+  },
+  "homepage": "https://github.com/king2088/cordova-plugin-usbserialport#readme"
+}

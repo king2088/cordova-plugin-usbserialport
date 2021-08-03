@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    id="cordova-plugin-usbserialport"
+    version="0.0.1">
+    <name>cordova-plugin-usbserialport</name>
+    <description>Cordova plugin to communicate with the android USB serial port, integrate the latest mik3y/usb-serial-for-android drivers</description>
+    <license>MIT</license>
+    <keywords>serial,cordova,serial port,android</keywords>
+
+    <!-- js module -->
+    <js-module src="www/usbSerialPort.js" name="usbSerialPort">
+        <clobbers target="usbSerialPort" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="usbSerialPort">
+                <param name="android-package" value="ty.cordova.serial.Serial"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/Serial.java" target-dir="src/ty/cordova/serial/Serial" />
+        <source-file src="src/android/UsbBroadcastReceiver.java" target-dir="src/ty/cordova/serial" />
+        <lib-file src="lib/usbseriallibrary.jar" arch="device" />
+    </platform>
+</plugin>

@@ -1,80 +1,79 @@
 # cordova-plugin-usbserialport
 
-**[Read English README.md](./README.md)**
-此插件是基于[cordovarduino](https://github.com/xseignard/cordovarduino)基础上，升级了[usb-serial-for-android](https://github.com/mik3y/usb-serial-for-android)库后增加了相应的方法，目前可以很好的适用于常见的一些USB/Type-C转串口的串口硬件。使用此插件，可以在android手机上直接使用USB或Type-C接口的USB转458/232等串口。
-**此插件仅适用于Android**
+**[阅读中文版README.md](./README.zh.md)**
+This plug-in is modified according to [cordovarduino](https://github.com/xseignard/cordovarduino) and updated [usb-serial-for-android](https://github.com/mik3y/usb-serial-for-android) library.
 
-## 简介
+## Description
 
-此 Cordova/Phonegap 插件允许使用 *USB On-The-Go* (OTG) 从您的 Android 设备到您的串口板或其他USB供电的串行IO设备进行双向串行通信。
+This Cordova/Phonegap plugin allows two-way serial communication using *USB On-The-Go* (OTG) from your Android device to your usb serial port board or other USB-powered serial IO device.
 
-这意味着您可以使用 cordova-plugin-usbserialport 插件开发关于串口收发数据的Android应用
+And that means that ability to give your cordova-plugin-usbserialport project a mobile app (web-view) interface as well as powering it using the rechargeable battery on your phone!
 
-### 安装
+### Install it
 
-cordova项目运行:
+From the root folder of your cordova project, run :
 
 ```bash
 cordova plugin add cordovcordova-plugin-usbserialport
 ```
 
-### 使用方法
+### How to use it
 
-您首先需要了解如何创建和上传一个简单的 Cordova 项目。 这里有一些关于 [如何开始](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) 在 Android 上使用 Cordova 的信息，这里是一个 [简单的 Cordova plugin](https://github.com/apache/cordova-plugin-vibration) 可以用来熟悉插件系统。
+Your first need to understand how to create and upload a simple Cordova Project. Here is some info on [how to get started](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) with Cordova on Android, and here is a [simple Cordova plugin](https://github.com/apache/cordova-plugin-vibration) you can use to get familiar with the plugin system.
 
-使用方法:
+The plugin API for this behaves as follows:
 
-android权限的原因，需要首先请求USB权限，使用以下代码请求权限:
+Because you're polite, first request the permission to use the serial port to the system:
 
 ```js
 usbSerialPort.requestPermission(function success(), function error());
 ```
 
-获取设备信息（可选）:
+You can get device infomation:
 
 ```js
 usbSerialPort.getDevice(function success(), function error());
 ```
 
-获取串口打开状态（可选）:
+You can get open status:
 
 ```js
 usbSerialPort.isOpen(function success(), function error());
 ```
 
-其次，打开串口:
+You can now open the serial port:
 
 ```js
 usbSerialPort.open(opts, function success(), function error());
 ```
 
-`opts` 是JSON对象，包含如下属性:  
+`opts` is a JSON object with the following properties:
 
-- baudRate: 波特率，默认9600  
-- dataBits: 数据位，默认8  
-- stopBits: 停止位，默认1  
-- parity: 奇偶检验，默认0  
-- dtr: 默认false (对于部分串口需要为true)  
-- rts: 默认false (部分模块需要为true, 包括monkeyboard dab 模块)  
-- sleepOnPause: 默认true. 如果为 false，则当应用程序进入后台（或屏幕关闭）时，OTG 端口将保持打开状态。 否则，端口会自动关闭，并在应用程序返回前台后恢复。  
+- baudRate: defaults to 9600
+- dataBits: defaults to 8
+- stopBits: defaults to 1
+- parity: defaults to 0
+- dtr: defaults to false (it may be needed to be true for some cordova-plugin-usbserialport)
+- rts: defaults to false (it may be needed to be true for some modules, including the monkeyboard dab module)
+- sleepOnPause: defaults to true. If false, the the OTG port will remain open when the app goes to the background (or the screen turns off). Otherwise, the port with automatically close, and resume once the app is brought back to foreground.
 
-再次，写入和读取串口数据:
+You're now able to read and write:
 
 ```js
 usbSerialPort.write(data, function success(), function error());
 usbSerialPort.read(function success(buffer), function error());
 ```
 
-`data` 是要写入串行端口的字符串表示形式。  
-`buffer` 读取的数据为 JavaScript ArrayBuffer。  
-  
-除了使用`usbSerialPort.write`，您还可以使用`usbSerialPort.writeHex` 来发送**hex-strings** 并使用**RS232 协议** 驱动的硬件。  
+`data` is the string representation to be written to the serial port.
+`buffer` is a JavaScript ArrayBuffer containing the data that was just read.
 
-简而言之，`usbSerialPort.writeHex('ff')` 只会写入一个字节，而 `usbSerialPort.write('ff')` 会写入2个到串行端口。  
+Apart from using `usbSerialPort.write`, you can also use `usbSerialPort.writeHex` to have an easy way to work with **RS232 protocol** driven hardware from your javascript by using **hex-strings**.
 
-除此之外，`usbSerialPort.writeHex` 的工作方式与 `usbSerialPort.write` 的工作方式相同。  
-  
-然后，需要使用 `usbSerialPort.readListener` 监听串口数据返回。返回的数据为ArrayBuffer，可参考如下代码：
+In a nutshell, `usbSerialPort.writeHex('ff')` would write just a single byte where `usbSerialPort.write('ff')` would let java write 2 bytes to the serial port.
+
+Apart from that, `usbSerialPort.writeHex` works the same way as `usbSerialPort.write` does.
+
+Register a callback that will be invoked when the driver reads incoming data from your serial device. The success callback function will recieve an ArrayBuffer filled with the data read from serial:
 
 ```js
 usbSerialPort.readListener(
@@ -87,13 +86,15 @@ function error(){
 });
 ```
 
-最后，关闭串口:
+And finally close the port:
 
 ```js
 usbSerialPort.close(function success(), function error())
 ```
 
-### 简单的代码示例
+### A Simple Example
+
+A callback-ish example.
 
 ```js
 var errorCallback = function(message) {
@@ -120,9 +121,9 @@ usbSerialPort.requestPermission(
 );
 ```
 
-### 完整的示例
+### A Complete Example
 
-创建 `index.html`:
+Here is your `index.html`:
 
 ```html
 <!DOCTYPE html>
@@ -133,15 +134,15 @@ usbSerialPort.requestPermission(
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>串口操作</title>
+        <title>Hello World</title>
     </head>
     <body>
         <div class="app">
-            <h1>串口操作</h1>
-            <p>值 <span id="pot">...</span></p>
+            <h1>Potentiometer value</h1>
+            <p>Value <span id="pot">...</span></p>
             <p id="delta">...</p>
-            <button id="on">写入1</button>
-            <button id="off">写入0</button>
+            <button id="on">On</button>
+            <button id="off">Off</button>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
@@ -149,7 +150,7 @@ usbSerialPort.requestPermission(
 </html>
 ```
 
-创建 `index.js`:
+Here is the `index.js` file:
 
 ```js
 var app = {
@@ -167,34 +168,34 @@ var app = {
         var errorCallback = function(message) {
             alert('Error: ' + message);
         };
-        // 首先请求USB权限
+        // request permission first
         usbSerialPort.requestPermission(
-            // 如果用户授权
+            // if user grants permission
             function(successMessage) {
-                // 打开串口
+                // open serial port
                 usbSerialPort.open(
                     {baudRate: 9600},
-                    // 如果串口成功打开
+                    // if port is succesfuly opened
                     function(successMessage) {
-                        // 监听串口
+                        // register the read callback
                         usbSerialPort.readListener(
                             function success(data){
-                                // 解码返回的数据
+                                // decode the received message
                                 var view = new Uint8Array(data);
                                 if(view.length >= 1) {
                                     for(var i=0; i < view.length; i++) {
-                                        // 如果我们收到一个\n，则消息完成，显示它
+                                        // if we received a \n, the message is complete, display it
                                         if(view[i] == 13) {
-                                            // 检查读取速率是否对应于串行打印速率 
+                                            // check if the read rate correspond to the cordova-plugin-usbserialport serial print rate
                                             var now = new Date();
                                             delta.innerText = now - lastRead;
                                             lastRead = now;
-                                            // 显示消息
+                                            // display the message
                                             var value = parseInt(str);
                                             pot.innerText = value;
                                             str = '';
                                         }
-                                        // 如果不是\n，则将所有消息累加
+                                        // if not, concatenate with the begening of the message
                                         else {
                                             var temp_str = String.fromCharCode(view[i]);
                                             var str_esc = escape(temp_str);
@@ -203,15 +204,15 @@ var app = {
                                     }
                                 }
                             },
-                            // 监听错误信息
+                            // error attaching the callback
                             errorCallback
                         );
                     },
-                    // 打开串口错误信息
+                    // error opening the port
                     errorCallback
                 );
             },
-            // 未授权错误
+            // user does not grant permission
             errorCallback
         );
 
@@ -220,8 +221,8 @@ var app = {
                 if(opened) {
                     usbSerialPort.write('1');
                 }
-            }, err => {
-                console.log(`发生错误：${err}`)
+            }, openError => {
+                console.log(`open serial error ：${openError}`)
             })
         };
         off.onclick = function() {
@@ -229,8 +230,8 @@ var app = {
                 if(opened) {
                     usbSerialPort.write('0');
                 }
-            }, err => {
-                console.log(`发生错误：${err}`)
+            }, openError => {
+                console.log(`open serial error ：${openError}`)
             })
         }
     }
@@ -239,20 +240,20 @@ var app = {
 app.initialize();
 ```
 
-### 您的设备为未知设备？
+### Your Device is not (yet) known?
 
-感谢 [usb-serial-for-android](https://github.com/mik3y/usb-serial-for-android) 库，您可以与 CDC、FTDI、Serial 等设备进行通信。  
+Thanks to [usb-serial-for-android](https://github.com/mik3y/usb-serial-for-android) library, you can communicate with CDC, FTDI, cordova-plugin-usbserialport and other devices. 
 
-您的设备可能未在 <https://github.com/mik3y/usb-serial-for-android> 中列出。  
-如果您知道您的设备 VID（供应商 ID）和 PID（产品 ID），您可以尝试  
+Your device might not be listed over at <https://github.com/mik3y/usb-serial-for-android> .
+If you know your devices VID (Vendor ID) and PID (Product ID) you could however try
 
 ```js
-usbSerialPort.requestPermission({vid: '1d50', pid: '607d'}, function success(), function error()); // 16进制
+usbSerialPort.requestPermission({vid: '1d50', pid: '607d'}, function success(), function error()); //hex strings
 or
-usbSerialPort.requestPermission({vid: 7504, pid: 24701}, function success(), function error()); // 整数
+usbSerialPort.requestPermission({vid: 7504, pid: 24701}, function success(), function error()); //integers
 ```
 
-您还可以选择要使用的驱动程序。 选项是：
+You can also choose the driver to use. Options are:
 
 - `CdcAcmSerialDriver`
 - `Ch34xSerialDriver`
@@ -260,7 +261,8 @@ usbSerialPort.requestPermission({vid: 7504, pid: 24701}, function success(), fun
 - `FtdiSerialDriver`
 - `ProlificSerialDriver`
 
-如果为空或不是其中之一，则默认为“CdcAcmSerialDriver”。  
+
+It defaults to `CdcAcmSerialDriver` if empty or not one of these (please feel free to add a PR to support more).
 
 ```js
 usbSerialPort.requestPermission({
@@ -273,4 +275,4 @@ usbSerialPort.requestPermission({
 );
 ```
 
-您可以使用“lsusb”（以十六进制返回 VID:PID）或查看您的 dmesg 日志在android上找到您的设备 VID 和 PID。
+You can find your devices VID and PID on linux or android using "lsusb" (returning VID:PID in hex) or by looking at your dmesg log.
