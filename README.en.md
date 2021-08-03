@@ -15,7 +15,7 @@ And that means that ability to give your cordova-plugin-usbserialport project a 
 From the root folder of your cordova project, run :
 
 ```bash
-cordova plugin add cordovcordova-plugin-usbserialport
+cordova plugin add cordova-plugin-usbserialport
 ```
 
 ### How to use it
