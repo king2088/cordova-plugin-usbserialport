@@ -24,6 +24,7 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 
+import android.os.Build;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -199,8 +200,9 @@ public class Serial extends CordovaPlugin {
 					// get the first one as there is a high chance that there is no more than one usb device attached to your android
 					driver = availableDrivers.get(0);
 					UsbDevice device = driver.getDevice();
+					int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_MUTABLE : 0;
 					// create the intent that will be used to get the permission
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, new Intent(UsbBroadcastReceiver.USB_PERMISSION), 0);
+					PendingIntent pendingIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, new Intent(UsbBroadcastReceiver.USB_PERMISSION), flags);
 					// and a filter on the permission we ask
 					IntentFilter filter = new IntentFilter();
 					filter.addAction(UsbBroadcastReceiver.USB_PERMISSION);
