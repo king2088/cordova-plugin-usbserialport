@@ -200,7 +200,16 @@ public class Serial extends CordovaPlugin {
 					// get the first one as there is a high chance that there is no more than one usb device attached to your android
 					driver = availableDrivers.get(0);
 					UsbDevice device = driver.getDevice();
-					int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_MUTABLE : 0;
+					int flags;
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+					    // Android 12 (S+) and newer versions
+					    flags = PendingIntent.FLAG_IMMUTABLE;
+					} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ){
+					    // Versions earlier than Android 12
+					    flags = PendingIntent.FLAG_MUTABLE;
+					} else {
+					    flags = 0;
+					}
 					// create the intent that will be used to get the permission
 					PendingIntent pendingIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, new Intent(UsbBroadcastReceiver.USB_PERMISSION), flags);
 					// and a filter on the permission we ask
